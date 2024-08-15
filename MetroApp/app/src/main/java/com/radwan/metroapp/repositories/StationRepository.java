@@ -73,14 +73,6 @@ public class StationRepository {
     public Graph getGraph() {
         return graph;
     }
-//
-//    public List<String> getAllStation() {
-//        List<String> allStations = new ArrayList<>();
-//        for (Line line : lines) {
-//            allStations.addAll(line.getStations());
-//        }
-//        return allStations;
-//    }
 
     public List<String> getTotalStations() {
         return totalStations;
