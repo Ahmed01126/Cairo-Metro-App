@@ -6,7 +6,7 @@ import android.speech.tts.TextToSpeech;
 import java.util.Locale;
 
 public class TextToSpeechService implements TextToSpeech.OnInitListener {
-    private TextToSpeech textToSpeech;
+    private final TextToSpeech textToSpeech;
     private StringBuilder Speech;
     public TextToSpeechService(Context context) {
         textToSpeech = new TextToSpeech(context, this);
@@ -21,8 +21,8 @@ public class TextToSpeechService implements TextToSpeech.OnInitListener {
         }
     }
 
-    public void speak(String text) {
-        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
+    public void speak(StringBuilder text) {
+        textToSpeech.speak(text.toString(), TextToSpeech.QUEUE_FLUSH, null, null);
     }
 
     public void shutdown() {
@@ -47,5 +47,9 @@ public class TextToSpeechService implements TextToSpeech.OnInitListener {
             // textToSpeech.speak("No valid text found between parentheses", TextToSpeech.QUEUE_FLUSH, null, null);
         }
         return fullText;
+    }
+
+    public StringBuilder getSpeech() {
+        return Speech;
     }
 }

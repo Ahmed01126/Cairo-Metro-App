@@ -8,6 +8,8 @@ public class RouteFormatterImpl implements RouteFormatter {
     private final StationRepository stationRepository;
     private String initialDirection;
 
+    private StringBuilder route;
+
     public RouteFormatterImpl(StationRepository stationRepository) {
         this.stationRepository = stationRepository;
     }
@@ -131,11 +133,17 @@ public class RouteFormatterImpl implements RouteFormatter {
             if (i + 1 < stations.length)
                 routeString.append(" -> ");
         }
+        route = routeString;
         return routeString.toString();
     
     }
     @Override
     public String getInitialDirection() {
         return initialDirection;
+    }
+
+    @Override
+    public StringBuilder getRoute() {
+        return route;
     }
 }

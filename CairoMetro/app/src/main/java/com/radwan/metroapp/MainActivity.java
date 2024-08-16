@@ -2,15 +2,25 @@
 package com.radwan.metroapp;
 
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -22,19 +32,27 @@ import com.github.nisrulz.sensey.Sensey;
 import com.github.nisrulz.sensey.ShakeDetector;
 import com.radwan.metroapp.R;
 import com.radwan.metroapp.repositories.StationRepository;
+import com.radwan.metroapp.services.RouteFormatter;
 import com.radwan.metroapp.services.RouteService;
 import com.radwan.metroapp.services.ShakeDetectionService;
 import com.radwan.metroapp.services.TextToSpeechService;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity /*implements ShakeDetector.ShakeListener*/ {
+import mumayank.com.airlocationlibrary.AirLocation;
+
+public class MainActivity extends AppCompatActivity implements AirLocation.Callback /*implements ShakeDetector.ShakeListener*/ {
 
     private AutoCompleteTextView startStationAutoComplete;
     private AutoCompleteTextView endStationAutoComplete;
     private TextView summaryText;
 
     private RouteService routeService;
+
+    private String address;
+    private RouteFormatter routeFormatter;
     private TextToSpeechService textToSpeechService;
     private ShakeDetectionService shakeDetectionService;
     private StationRepository stationRepository;
@@ -56,9 +74,10 @@ public class MainActivity extends AppCompatActivity /*implements ShakeDetector.S
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-//        Sensey.getInstance().init(this);
+        Sensey.getInstance().init(this);
 //        Sensey.getInstance().startShakeDetection(this);
-
+        AirLocation airLocation = new AirLocation(this, this, true, 0, "");
+        airLocation.start();
         initializeViews();
         initializeServices();
         setupAutoCompleteViews();
@@ -67,8 +86,8 @@ public class MainActivity extends AppCompatActivity /*implements ShakeDetector.S
   }
 
     private void savePreviousData(Bundle savedInstanceState) {
-        String StartStation = startStationAutoComplete.getText().toString();
-        String EndStation = endStationAutoComplete.getText().toString();
+        String StartStation;
+        String EndStation;
         previousData = getSharedPreferences(PREVIOUS_DATA_PREF, MODE_PRIVATE);
         if (savedInstanceState != null) {
             StartStation = savedInstanceState.getString(START_STATION_KEY);
@@ -168,8 +187,19 @@ public class MainActivity extends AppCompatActivity /*implements ShakeDetector.S
         }
 
         String routeSummary = routeService.getRouteSummary(startStation, endStation);
+
+//        StringBuilder text= new StringBuilder();
+//        text.append(routeSummary);
+//        text = textToSpeechService.speakTextSubString(text);
+//        StringBuilder textSpeech = textToSpeechService.getSpeech();
+//        textSpeech.append(" Then ");
+//        text = textToSpeechService.speakTextSubString(text);
+//        textSpeech.append(textToSpeechService.getSpeech());
+//        routeSummary = text.toString();
         summaryText.setText(routeSummary);
-//        textToSpeechService.speak(routeService.getRouteAnnouncement());
+//        textToSpeechService.speak(textSpeech);
+
+
     }
 
     // Handle the swap button click event
@@ -232,5 +262,39 @@ public class MainActivity extends AppCompatActivity /*implements ShakeDetector.S
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
         super.onPointerCaptureChanged(hasCapture);
+    }
+
+//    @Override
+//    public void onSuccess(@NonNull ArrayList<Location> arrayList) {
+//
+//    }
+//
+//    @Override
+//    public void onFailure(@NonNull AirLocation.LocationFailedEnum locationFailedEnum) {
+//
+//    }
+    @Override
+    public void onFailure(@NonNull AirLocation.LocationFailedEnum locationFailedEnum) {
+        Toast.makeText(this, "Error in getting location", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onSuccess(@NonNull ArrayList<Location> locations) {
+        double latitude = locations.get(0).getLatitude();
+        double longitude = locations.get(0).getLongitude();
+        Geocoder geocoder = new Geocoder(this);
+        try {
+            List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 1);
+            address = addressList.get(0).getAddressLine(0);
+            startStationAutoComplete.setText(address);
+        } catch (IOException e) {
+            Toast.makeText(this, "Connection error", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void goMapOnClick(View view) {
+        Uri gmmIntentUri = Uri.parse("geo:0,0?q="+address);
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        startActivity(mapIntent);
     }
 }

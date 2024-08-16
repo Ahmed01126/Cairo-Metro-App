@@ -5,4 +5,5 @@ public interface RouteFormatter {
     String getRouteString(String[] stations);
 
     String getInitialDirection();
+    StringBuilder getRoute();
 }
