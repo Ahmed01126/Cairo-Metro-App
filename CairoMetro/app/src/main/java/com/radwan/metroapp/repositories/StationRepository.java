@@ -1,5 +1,9 @@
 package com.radwan.metroapp.repositories;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import com.radwan.metroapp.models.Graph;
 import com.radwan.metroapp.models.Line;
 
@@ -47,11 +51,13 @@ public class StationRepository {
 
 
         // Initialize stations
-        totalStations = lines.stream()
-            .map(Line::getStations)
-            .flatMap(List::stream)
-            .collect(Collectors.toList());
-        totalStations = totalStations.stream().distinct().sorted().collect(Collectors.toList());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            totalStations = lines.stream()
+                .map(Line::getStations)
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+            totalStations = totalStations.stream().distinct().sorted().collect(Collectors.toList());
+        }
 
     }
 
