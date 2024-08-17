@@ -49,7 +49,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="60dp"
         android:background="@drawable/spinner_background"
         android:focusable="true"
@@ -63,11 +63,11 @@
         app:layout_constraintTop_toBottomOf="@+id/startStationAutoComplete" />
 
     <Button
-        android:id="@+id/backbtn"
-        android:layout_width="116dp"
-        android:layout_height="65dp"
+        android:id="@+id/donebtn"
+        android:layout_width="113dp"
+        android:layout_height="54dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:backgroundTint="#E42828"
         android:layoutDirection="ltr"
         android:onClick="onDoneButtonClick"
@@ -81,11 +81,11 @@
 
     <ImageView
         android:id="@+id/swap"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:onClick="swap_station"
+        android:layout_width="41dp"
+        android:layout_height="44dp"
+        android:layout_marginEnd="12dp"
         android:layoutDirection="ltr"
+        android:onClick="swap_station"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/endStationAutoComplete"
         app:srcCompat="@drawable/swap"
@@ -99,7 +99,7 @@
         android:layout_marginTop="4dp"
         android:layoutDirection="ltr"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/backbtn">
+        app:layout_constraintTop_toBottomOf="@+id/donebtn">
 
         <TextView
             android:id="@+id/summaryText"
@@ -111,17 +111,18 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/backbtn"
+            app:layout_constraintTop_toBottomOf="@+id/donebtn"
             tools:text="summaryText" />
     </ScrollView>
 
-    <Button
+    <ImageView
         android:id="@+id/GoMap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:onClick="goMapOnClick"
-        android:text="Button"
-        tools:layout_editor_absoluteX="318dp"
-        tools:layout_editor_absoluteY="32dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/startStationAutoComplete"
+        app:srcCompat="@drawable/mapicon" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
