@@ -64,8 +64,8 @@
 
     <Button
         android:id="@+id/donebtn"
-        android:layout_width="113dp"
-        android:layout_height="54dp"
+        android:layout_width="125dp"
+        android:layout_height="55dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:backgroundTint="#E42828"
@@ -124,5 +124,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/startStationAutoComplete"
         app:srcCompat="@drawable/mapicon" />
+
+    <Button
+        android:id="@+id/goPaths"
+        android:layout_width="120dp"
+        android:layout_height="54dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="#E42828"
+        android:onClick="onPathsButtonClick"
+        android:text="All Paths"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="#000000"
+        android:textColorHint="#000000"
+        android:textColorLink="#000000"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/donebtn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
